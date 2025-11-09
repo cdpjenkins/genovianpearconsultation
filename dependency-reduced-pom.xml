@@ -126,12 +126,25 @@
       </properties>
     </profile>
   </profiles>
+  <dependencies>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.42</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest</artifactId>
+      <version>3.0</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
   <reporting>
     <plugins>
       <plugin>
         <artifactId>maven-project-info-reports-plugin</artifactId>
         <configuration>
-          <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
           <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
         </configuration>
       </plugin>
@@ -152,6 +165,7 @@
     </dependencies>
   </dependencyManagement>
   <properties>
+    <lombok.version>1.18.42</lombok.version>
     <dropwizard.version>5.0.0</dropwizard.version>
     <mainClass>com.cdpjenkins.genovianpearconsultation.GenovianPearConsultationApplication</mainClass>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
