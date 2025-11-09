@@ -1,8 +1,4 @@
 # TODO
-- When in status COMPLETED, can submit for approval
-- Form can be submitted if it is in status IN_PROGRESS
-- Form is approved if <some condition> is met
-- Form is rejected if <some condition> is not met
 - If form is rejected, a field is set on the form with a reason for rejection
 - We're specifying IDs in both URL path and in JSON body, which allows them to be different
 - Form cannot be submitted if it is not in status COMPLETED
@@ -27,3 +23,7 @@
 - Consultation Form has questions
 - POST textual answers to those questions by ID
 - Before all questions are answered, status is set to IN_PROGRESS
+- When in status COMPLETED, can submit for approval
+- Form cannot be submitted if it is in status IN_PROGRESS
+- Form is approved if <some condition> is met
+- Form is rejected if <some condition> is not met

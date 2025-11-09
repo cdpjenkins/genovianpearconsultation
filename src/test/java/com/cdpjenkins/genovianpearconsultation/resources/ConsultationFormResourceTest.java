@@ -127,6 +127,20 @@ class ConsultationFormResourceTest {
         assertThat(getConsultationForm(1).getStatus(), is(APPROVED));
     }
 
+    @Test
+    void consultation_form_is_rejected_if_user_is_allergic_to_ingredients() {
+        createConsultationForm();
+
+        postAnswer(1, 1, "185 cm");
+        postAnswer(1, 2, "80 kg");
+        postAnswer(1, 3, "120/80");
+        postAnswer(1, 4, "Yes");
+
+        submitConsultationForm(1);
+
+        assertThat(getConsultationForm(1).getStatus(), is(REJECTED));
+    }
+
     private static Response createConsultationForm() {
         Response response = EXT.target("/consultations")
                 .request()

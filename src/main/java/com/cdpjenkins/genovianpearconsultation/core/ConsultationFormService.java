@@ -62,7 +62,24 @@ public class ConsultationFormService {
             throw new InvalidConsultationFormStateException("The form can only be submitted when it is completed.");
         }
 
-        consultationForm.setStatus(ConsultationForm.Status.APPROVED);
+        switch (decideApproval(consultationForm)) {
+            case REJECTED:
+                consultationForm.setStatus(ConsultationForm.Status.REJECTED);
+                return;
+            case APPROVED:
+                consultationForm.setStatus(ConsultationForm.Status.APPROVED);
+                return;
+            default:
+                throw new IllegalStateException("Unexpected value: " + consultationForm.getStatus());
+        }
+    }
+
+    private ConsultationForm.Status decideApproval(ConsultationForm consultationForm) {
+        if (consultationForm.getAnswer(4).getAnswer().equals("Yes")) {
+            return ConsultationForm.Status.REJECTED;
+        } else {
+            return ConsultationForm.Status.APPROVED;
+        }
     }
 
     /**
