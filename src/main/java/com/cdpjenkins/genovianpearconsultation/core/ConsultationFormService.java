@@ -3,6 +3,7 @@ package com.cdpjenkins.genovianpearconsultation.core;
 import com.cdpjenkins.genovianpearconsultation.api.Answer;
 import com.cdpjenkins.genovianpearconsultation.api.ConsultationForm;
 import com.cdpjenkins.genovianpearconsultation.api.Question;
+import com.cdpjenkins.genovianpearconsultation.exceptions.InvalidConsultationFormStateException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,15 +40,14 @@ public class ConsultationFormService {
         return consultationFormRepository.get(consultationId);
     }
 
-    public void answerQuestion(int consultationId, int questionId, Answer answer) {
+    public void answerQuestion(int consultationId, int questionId, Answer answer) throws InvalidConsultationFormStateException {
         ConsultationForm consultationForm = consultationFormRepository.get(consultationId);
 
         if (consultationForm.getAnswer(questionId) == null) {
             List<Answer> answers = consultationForm.getAnswers();
             answers.add(answer);
         } else {
-            // TODO throw an exception that we define, and map it to an appropriate HTTP status code
-            throw new IllegalArgumentException("Question already answered");
+            throw new InvalidConsultationFormStateException("Question already answered");
         }
 
         if (consultationForm.allQuestionsAreAnswered()) {

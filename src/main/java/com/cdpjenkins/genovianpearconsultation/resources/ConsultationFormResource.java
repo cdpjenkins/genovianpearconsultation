@@ -4,7 +4,7 @@ package com.cdpjenkins.genovianpearconsultation.resources;
 import com.cdpjenkins.genovianpearconsultation.api.Answer;
 import com.cdpjenkins.genovianpearconsultation.api.ConsultationForm;
 import com.cdpjenkins.genovianpearconsultation.core.ConsultationFormService;
-import com.cdpjenkins.genovianpearconsultation.core.InvalidConsultationFormStateException;
+import com.cdpjenkins.genovianpearconsultation.exceptions.InvalidConsultationFormStateException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -39,7 +39,7 @@ public class ConsultationFormResource {
     public Response answerQuestion(
             @PathParam("consultationId") int consultationId,
             @PathParam("questionId") int questionId,
-            Answer answer) {
+            Answer answer) throws InvalidConsultationFormStateException {
 
         consultationFormService.answerQuestion(consultationId, questionId, answer);
 

@@ -1,5 +1,6 @@
 package com.cdpjenkins.genovianpearconsultation.api;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
@@ -9,7 +10,6 @@ import lombok.extern.jackson.Jacksonized;
 @Builder
 @AllArgsConstructor
 @Jacksonized
-public class Answer {
-    int questionId;
-    String answer;
+public class ErrorResponse {
+    String errorMessage;
 }

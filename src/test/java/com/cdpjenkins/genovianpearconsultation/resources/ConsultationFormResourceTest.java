@@ -2,6 +2,7 @@ package com.cdpjenkins.genovianpearconsultation.resources;
 
 import com.cdpjenkins.genovianpearconsultation.api.Answer;
 import com.cdpjenkins.genovianpearconsultation.api.ConsultationForm;
+import com.cdpjenkins.genovianpearconsultation.api.ErrorResponse;
 import com.cdpjenkins.genovianpearconsultation.api.Question;
 import com.cdpjenkins.genovianpearconsultation.core.ConsultationFormService;
 import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
@@ -26,7 +27,7 @@ class ConsultationFormResourceTest {
 
     private static final ResourceExtension EXT = ResourceExtension.builder()
             .addResource(new ConsultationFormResource(consultationFormService))
-            .addProvider(new InvalidConsultationFormStateExceptionMapper())
+            .addProvider(new ConsultationFormExceptionMapper())
             .build();
 
     @BeforeEach
@@ -143,6 +144,16 @@ class ConsultationFormResourceTest {
         assertThat(retrievedConsultationForm.getRejectionReason(), is("User is allergic to the ingredients"));
     }
 
+    @Test
+    void you_cannot_answer_the_same_question_more_than_once() {
+        createConsultationForm();
+
+        postAnswer(1, 1, "185 cm");
+        Response response = postAnswer(1, 1, "186 cm");
+        assertThat(response.getStatus(), is(409));
+        assertThat(response.readEntity(ErrorResponse.class), is(new ErrorResponse("Question already answered")));
+    }
+
     private static Response createConsultationForm() {
         Response response = EXT.target("/consultations")
                 .request()
@@ -163,8 +174,6 @@ class ConsultationFormResourceTest {
         Response response = EXT.target(String.format("/consultations/%d/questions/%d/answer", consultationFormId, questionId))
                 .request()
                 .post(Entity.json(new Answer(questionId, answerText)));
-        assertThat(response.getStatus(), is(200));
-
         return response;
     }
 
