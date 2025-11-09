@@ -52,6 +52,12 @@ public class ConsultationFormService {
         }
     }
 
+    public void submitConsultation(int consultationId) {
+        ConsultationForm consultationForm = consultationFormRepository.get(consultationId);
+
+        consultationForm.setStatus(ConsultationForm.Status.APPROVED);
+    }
+
     /**
      * Only for use in tests!
      *

@@ -45,6 +45,13 @@ public class ConsultationFormResource {
         return Response.ok().build();
     }
 
+    @POST
+    @Path("/{consultationId}/submit")
+    public Response submitConsultationForm(@PathParam("consultationId") int consultationId) {
+        consultationFormService.submitConsultation(consultationId);
+
+        return Response.ok().build();
+    }
 
     private static URI uriFor(ConsultationForm persistedConsultationForm) {
         return UriBuilder.fromResource(ConsultationFormResource.class).path(String.valueOf(persistedConsultationForm.getId())).build();
