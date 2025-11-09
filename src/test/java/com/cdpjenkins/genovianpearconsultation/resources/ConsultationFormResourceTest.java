@@ -8,6 +8,8 @@ import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
@@ -22,7 +24,11 @@ class ConsultationFormResourceTest {
         Response response = EXT.target("/consultations")
                 .request()
                 .post(Entity.json(Entity.json(ConsultationForm.class)));
-        assertEquals(201, response.getStatus());
-        assertEquals("http://localhost:0/consultations", response.getHeaderString("Location"));
+
+        assertThat(response.getStatus(), is(201));
+        assertThat(response.getHeaderString("Location"), is("http://localhost:0/consultations"));
+
+        ConsultationForm createdEntity = response.readEntity(ConsultationForm.class);
+        assertThat(createdEntity.getProductName(), is("genovian-pear"));
     }
 }
