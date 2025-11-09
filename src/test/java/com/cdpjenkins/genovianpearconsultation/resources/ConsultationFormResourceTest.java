@@ -1,17 +1,19 @@
 package com.cdpjenkins.genovianpearconsultation.resources;
 
 import com.cdpjenkins.genovianpearconsultation.api.ConsultationForm;
+import com.cdpjenkins.genovianpearconsultation.api.Question;
 import com.cdpjenkins.genovianpearconsultation.core.ConsultationFormService;
 import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import io.dropwizard.testing.junit5.ResourceExtension;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.Response;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(DropwizardExtensionsSupport.class)
 class ConsultationFormResourceTest {
@@ -19,8 +21,13 @@ class ConsultationFormResourceTest {
     private static final ConsultationFormService consultationFormService = new ConsultationFormService();
 
     private static final ResourceExtension EXT = ResourceExtension.builder()
-                .addResource(new ConsultationFormResource(consultationFormService))
-                .build();
+            .addResource(new ConsultationFormResource(consultationFormService))
+            .build();
+
+    @BeforeEach
+    void setUp() {
+        consultationFormService.reset();
+    }
 
     @Test
     void can_create_and_retrieve_consultation_form() {
@@ -31,9 +38,35 @@ class ConsultationFormResourceTest {
         assertThat(response.getStatus(), is(201));
         assertThat(response.getHeaderString("Location"), is("http://localhost:0/consultations/1"));
 
-        ConsultationForm createdEntity = response.readEntity(ConsultationForm.class);
-        assertThat(createdEntity.getProductName(), is("genovian-pear"));
-        assertThat(createdEntity.getId(), is(1));
+        ConsultationForm createdConsultationForm = response.readEntity(ConsultationForm.class);
+        assertThat(createdConsultationForm.getProductName(), is("genovian-pear"));
+        assertThat(createdConsultationForm.getId(), is(1));
+
+        Response getResponse = EXT.target("/consultations/1")
+                .request()
+                .get();
+        assertThat(getResponse.getStatus(), is(200));
+        assertThat(getResponse.readEntity(ConsultationForm.class), is(createdConsultationForm));
+
     }
 
+    @Test
+    void consultation_form_has_questions_once_persisted() {
+        EXT.target("/consultations")
+                .request()
+                .post(Entity.json(new ConsultationForm("genovian-pear")));
+
+        ConsultationForm consultationForm = EXT.target("/consultations/1")
+                .request()
+                .get()
+                .readEntity(ConsultationForm.class);
+
+        assertThat(consultationForm.getQuestions(),
+                contains(
+                        new Question(1, "Please enter your height."),
+                        new Question(2, "Please enter your weight."),
+                        new Question(3, "Please enter your blood pressure."),
+                        new Question(4, "Are you allergic to any of the ingredients in this medication?")
+                ));
+    }
 }
