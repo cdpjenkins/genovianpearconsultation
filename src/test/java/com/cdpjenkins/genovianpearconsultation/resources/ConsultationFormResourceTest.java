@@ -26,6 +26,7 @@ class ConsultationFormResourceTest {
 
     private static final ResourceExtension EXT = ResourceExtension.builder()
             .addResource(new ConsultationFormResource(consultationFormService))
+            .addProvider(new InvalidConsultationFormStateExceptionMapper())
             .build();
 
     @BeforeEach
@@ -94,6 +95,18 @@ class ConsultationFormResourceTest {
         postAnswer(1, 4, "No");
 
         assertThat(getConsultationForm(1).getStatus(), is(COMPLETED));
+    }
+
+    @Test
+    void consultation_form_cannot_be_submitted_if_it_is_not_completed() {
+        createConsultationForm();
+
+        postAnswer(1, 1, "185 cm");
+
+        Response response = submitConsultationForm(1);
+        assertThat(response.getStatus(), is(409));
+
+        assertThat(getConsultationForm(1).getStatus(), is(IN_PROGRESS));
     }
 
     @Test

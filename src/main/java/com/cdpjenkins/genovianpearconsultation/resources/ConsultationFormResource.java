@@ -4,6 +4,7 @@ package com.cdpjenkins.genovianpearconsultation.resources;
 import com.cdpjenkins.genovianpearconsultation.api.Answer;
 import com.cdpjenkins.genovianpearconsultation.api.ConsultationForm;
 import com.cdpjenkins.genovianpearconsultation.core.ConsultationFormService;
+import com.cdpjenkins.genovianpearconsultation.core.InvalidConsultationFormStateException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -47,7 +48,7 @@ public class ConsultationFormResource {
 
     @POST
     @Path("/{consultationId}/submit")
-    public Response submitConsultationForm(@PathParam("consultationId") int consultationId) {
+    public Response submitConsultationForm(@PathParam("consultationId") int consultationId) throws InvalidConsultationFormStateException {
         consultationFormService.submitConsultation(consultationId);
 
         return Response.ok().build();

@@ -4,6 +4,7 @@ import com.cdpjenkins.genovianpearconsultation.api.Answer;
 import com.cdpjenkins.genovianpearconsultation.api.ConsultationForm;
 import com.cdpjenkins.genovianpearconsultation.api.Question;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,8 @@ public class ConsultationFormService {
                         new Question(4, "Are you allergic to any of the ingredients in this medication?")
                 )
         );
+
+        consultationForm.setAnswers(new ArrayList<>());
 
         consultationFormRepository.put(consultationForm.getId(), consultationForm);
 
@@ -52,8 +55,12 @@ public class ConsultationFormService {
         }
     }
 
-    public void submitConsultation(int consultationId) {
+    public void submitConsultation(int consultationId) throws InvalidConsultationFormStateException {
         ConsultationForm consultationForm = consultationFormRepository.get(consultationId);
+
+        if (consultationForm.getStatus() != ConsultationForm.Status.COMPLETED) {
+            throw new InvalidConsultationFormStateException("The form can only be submitted when it is completed.");
+        }
 
         consultationForm.setStatus(ConsultationForm.Status.APPROVED);
     }
