@@ -1,7 +1,7 @@
 # GenovianPearConsultation
 
-This is a backend app designed to support a user interface that asks the user a series of questions to see if they
-can be prescribed a medication that targets an allergy to the Genovian Pear.
+This is a backend Dropwizard  app designed to support a user interface that asks the user a series of questions to see
+if they can be prescribed a medication that targets an allergy to the Genovian Pear.
 
 ## The API largely follows RESTful principles, with the following endpoints:
 
@@ -12,6 +12,17 @@ can be prescribed a medication that targets an allergy to the Genovian Pear.
 
 The client should therefore be able to create a new consultation form, answer questions, submit the form, and then
 retrieve the status of the form again to see the status and any rejection reason.
+
+## Notes on the implementation:
+
+This application is designed to demonstrate the approach but contains a number of hacks to make it work:
+- There is no database; all data are stored in memory.
+- The brief did not mention authentication/authorisation. An API like this would need auth in order to go into
+  production, so auth is something that can be added, but there wasn't time to implement it in the 2-3 hours for this
+  exercise.
+- The set of questions (and indeed the name of the product) is hardcoded, but the API is designed in such a way that it
+  can be made configurable in the future. Especially if a database is added.
+- Error handling is fairly minimal; more handling of error cases would be needed before this could go into production.
 
 ## How to build and run the application:
 
