@@ -1,5 +1,4 @@
-# TODOs
-- Create a basic Dropwizard app skeleton
+# TODO
 - POST a ConsultationForm to create it
 - GET a ConsultationForm by id
 - Consultation Form has questions
@@ -21,3 +20,6 @@
     - Trying to POST to a form that doesn't exist -> 404
     - Trying to POST to a form that is not in state IN_PROGRESS -> 400
     - Trying to submit to a form that is in state PENDING -> 400
+
+# DONE
+- Create a basic Dropwizard app skeleton
