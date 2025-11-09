@@ -2,13 +2,18 @@ package com.cdpjenkins.genovianpearconsultation.api;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Value;
+import lombok.Data;
 import lombok.extern.jackson.Jacksonized;
 
-@Value
+@Data
 @Builder
 @Jacksonized
 @AllArgsConstructor
 public class ConsultationForm {
+    Integer id;
     String productName;
+
+    public ConsultationForm(String productName) {
+        this(null, productName);
+    }
 }

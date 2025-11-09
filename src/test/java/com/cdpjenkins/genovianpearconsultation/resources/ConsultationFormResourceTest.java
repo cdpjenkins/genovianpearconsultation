@@ -23,12 +23,13 @@ class ConsultationFormResourceTest {
     void can_create_and_retrieve_consultation_form() {
         Response response = EXT.target("/consultations")
                 .request()
-                .post(Entity.json(Entity.json(ConsultationForm.class)));
+                .post(Entity.json(new ConsultationForm("genovian-pear")));
 
         assertThat(response.getStatus(), is(201));
-        assertThat(response.getHeaderString("Location"), is("http://localhost:0/consultations"));
+        assertThat(response.getHeaderString("Location"), is("http://localhost:0/consultations/1"));
 
         ConsultationForm createdEntity = response.readEntity(ConsultationForm.class);
         assertThat(createdEntity.getProductName(), is("genovian-pear"));
+        assertThat(createdEntity.getId(), is(1));
     }
 }
