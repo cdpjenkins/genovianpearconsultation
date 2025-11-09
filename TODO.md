@@ -1,7 +1,4 @@
 # TODO
-- We're specifying IDs in both URL path and in JSON body, which allows them to be different
-- Form cannot be submitted if it is not in status COMPLETED
-
 - Auth
     - See https://codeburst.io/understanding-authentication-and-authorization-in-dropwizard-app-kotlin-e593d2052f33
     - Authentication: APi requests are only processed if valid basic auth credentials are provided (add comment saying we'd like
@@ -23,6 +20,8 @@
 - Before all questions are answered, status is set to IN_PROGRESS
 - When in status COMPLETED, can submit for approval
 - Form cannot be submitted if it is in status IN_PROGRESS
+- Form cannot be submitted if it is not in status COMPLETED
 - Form is approved if <some condition> is met
 - Form is rejected if <some condition> is not met
 - If form is rejected, a field is set on the form with a reason for rejection
+- We're specifying IDs in both URL path and in JSON body, which allows them to be different

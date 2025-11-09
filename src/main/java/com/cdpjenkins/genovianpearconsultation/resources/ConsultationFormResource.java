@@ -4,6 +4,7 @@ package com.cdpjenkins.genovianpearconsultation.resources;
 import com.cdpjenkins.genovianpearconsultation.api.Answer;
 import com.cdpjenkins.genovianpearconsultation.api.ConsultationForm;
 import com.cdpjenkins.genovianpearconsultation.core.ConsultationFormService;
+import com.cdpjenkins.genovianpearconsultation.exceptions.InvalidConsultationFormException;
 import com.cdpjenkins.genovianpearconsultation.exceptions.InvalidConsultationFormStateException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -22,10 +23,24 @@ public class ConsultationFormResource {
     }
 
     @POST
-    public Response createConsultationForm(ConsultationForm consultationForm) {
+    public Response createConsultationForm(ConsultationForm consultationForm) throws InvalidConsultationFormException {
+        validateCreateConsultationFormRequest(consultationForm);
+
         ConsultationForm persistedConsultationForm = consultationFormService.createConsultationForm(consultationForm);
 
         return Response.created(uriFor(persistedConsultationForm)).entity(persistedConsultationForm).build();
+    }
+
+    private void validateCreateConsultationFormRequest(ConsultationForm consultationForm) throws InvalidConsultationFormException {
+        if (consultationForm.getId() != null) {
+            throw new InvalidConsultationFormException("Consultation form ID must not be specified");
+        }
+
+        if (consultationForm.getProductName() == null) {
+            throw new InvalidConsultationFormException("Product name must be specified");
+        }
+
+        // TODO - more error handling here
     }
 
     @GET
@@ -39,11 +54,19 @@ public class ConsultationFormResource {
     public Response answerQuestion(
             @PathParam("consultationId") int consultationId,
             @PathParam("questionId") int questionId,
-            Answer answer) throws InvalidConsultationFormStateException {
+            Answer answer) throws InvalidConsultationFormStateException, InvalidConsultationFormException {
+
+        validateAnswerRequest(consultationId, questionId, answer);
 
         consultationFormService.answerQuestion(consultationId, questionId, answer);
 
         return Response.ok().build();
+    }
+
+    private void validateAnswerRequest(int consultationId, int questionId, Answer answer) throws InvalidConsultationFormException {
+        if (answer.getQuestionId() != questionId) {
+            throw new InvalidConsultationFormException("answerId in the requestBody must match the answerId in the request path");
+        }
     }
 
     @POST
