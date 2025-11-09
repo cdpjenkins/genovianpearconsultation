@@ -20,9 +20,10 @@ public class ConsultationForm {
     List<Question> questions;
     List<Answer> answers;
     Status status;
+    String rejectionReason;
 
     public ConsultationForm(String productName) {
-        this(null, productName, new ArrayList<>(), new ArrayList<>(), Status.IN_PROGRESS);
+        this(null, productName, new ArrayList<>(), new ArrayList<>(), Status.IN_PROGRESS, null);
     }
 
     public Answer getAnswer(int questionId) {

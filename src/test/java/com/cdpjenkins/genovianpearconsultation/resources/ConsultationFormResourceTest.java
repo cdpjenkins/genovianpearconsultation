@@ -138,7 +138,9 @@ class ConsultationFormResourceTest {
 
         submitConsultationForm(1);
 
-        assertThat(getConsultationForm(1).getStatus(), is(REJECTED));
+        ConsultationForm retrievedConsultationForm = getConsultationForm(1);
+        assertThat(retrievedConsultationForm.getStatus(), is(REJECTED));
+        assertThat(retrievedConsultationForm.getRejectionReason(), is("User is allergic to the ingredients"));
     }
 
     private static Response createConsultationForm() {

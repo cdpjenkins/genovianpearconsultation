@@ -65,6 +65,7 @@ public class ConsultationFormService {
         switch (decideApproval(consultationForm)) {
             case REJECTED:
                 consultationForm.setStatus(ConsultationForm.Status.REJECTED);
+                consultationForm.setRejectionReason("User is allergic to the ingredients");
                 return;
             case APPROVED:
                 consultationForm.setStatus(ConsultationForm.Status.APPROVED);
