@@ -1,6 +1,4 @@
 # TODO
-- POST a ConsultationForm to create it
-- GET a ConsultationForm by id
 - Consultation Form has questions
 - POST textual answers to those questions by ID
 - Before all questions are answered, status is set to IN_PROGRESS
@@ -23,3 +21,5 @@
 
 # DONE
 - Create a basic Dropwizard app skeleton
+- POST a ConsultationForm to create it
+- GET a ConsultationForm by id

@@ -1,5 +1,6 @@
 package com.cdpjenkins.genovianpearconsultation;
 
+import com.cdpjenkins.genovianpearconsultation.core.ConsultationFormService;
 import com.cdpjenkins.genovianpearconsultation.resources.ConsultationFormResource;
 import io.dropwizard.core.Application;
 import io.dropwizard.core.setup.Bootstrap;
@@ -24,7 +25,7 @@ public class GenovianPearConsultationApplication extends Application<GenovianPea
     @Override
     public void run(final GenovianPearConsultationConfiguration configuration,
                     final Environment environment) {
-        environment.jersey().register(new ConsultationFormResource());
+        environment.jersey().register(new ConsultationFormResource(new ConsultationFormService()));
     }
 
 }

@@ -1,6 +1,7 @@
 package com.cdpjenkins.genovianpearconsultation.resources;
 
 import com.cdpjenkins.genovianpearconsultation.api.ConsultationForm;
+import com.cdpjenkins.genovianpearconsultation.core.ConsultationFormService;
 import io.dropwizard.testing.junit5.DropwizardExtensionsSupport;
 import io.dropwizard.testing.junit5.ResourceExtension;
 import jakarta.ws.rs.client.Entity;
@@ -15,9 +16,11 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(DropwizardExtensionsSupport.class)
 class ConsultationFormResourceTest {
 
+    private static final ConsultationFormService consultationFormService = new ConsultationFormService();
+
     private static final ResourceExtension EXT = ResourceExtension.builder()
-            .addResource(new ConsultationFormResource())
-            .build();
+                .addResource(new ConsultationFormResource(consultationFormService))
+                .build();
 
     @Test
     void can_create_and_retrieve_consultation_form() {
@@ -32,4 +35,5 @@ class ConsultationFormResourceTest {
         assertThat(createdEntity.getProductName(), is("genovian-pear"));
         assertThat(createdEntity.getId(), is(1));
     }
+
 }

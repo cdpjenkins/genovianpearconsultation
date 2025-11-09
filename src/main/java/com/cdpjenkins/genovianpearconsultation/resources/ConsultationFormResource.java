@@ -2,6 +2,7 @@ package com.cdpjenkins.genovianpearconsultation.resources;
 
 
 import com.cdpjenkins.genovianpearconsultation.api.ConsultationForm;
+import com.cdpjenkins.genovianpearconsultation.core.ConsultationFormService;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -15,17 +16,20 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Path("/consultations")
 @Produces(MediaType.APPLICATION_JSON)
 public class ConsultationFormResource {
-    public ConsultationFormResource() {}
+    private final ConsultationFormService consultationFormService;
 
-    AtomicInteger idAllocator = new AtomicInteger();
+    public ConsultationFormResource(ConsultationFormService consultationFormService) {
+        this.consultationFormService = consultationFormService;
+    }
 
     @POST
     public Response createConsultationForm(ConsultationForm consultationForm) {
-        int id = idAllocator.incrementAndGet();
-        consultationForm.setId(id);
+        ConsultationForm persistedConsultationForm = consultationFormService.createConsultationForm(consultationForm);
 
-        URI uri = UriBuilder.fromResource(ConsultationFormResource.class).path(String.valueOf(id)).build();
+        return Response.created(uriFor(persistedConsultationForm)).entity(consultationForm).build();
+    }
 
-        return Response.created(uri).entity(consultationForm).build();
+    private static URI uriFor(ConsultationForm persistedConsultationForm) {
+        return UriBuilder.fromResource(ConsultationFormResource.class).path(String.valueOf(persistedConsultationForm.getId())).build();
     }
 }
