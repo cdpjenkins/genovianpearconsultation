@@ -1,6 +1,7 @@
 package com.cdpjenkins.genovianpearconsultation.resources;
 
 
+import com.cdpjenkins.genovianpearconsultation.api.Answer;
 import com.cdpjenkins.genovianpearconsultation.api.ConsultationForm;
 import com.cdpjenkins.genovianpearconsultation.core.ConsultationFormService;
 import jakarta.ws.rs.*;
@@ -30,8 +31,20 @@ public class ConsultationFormResource {
     @Path("/{consultationId}")
     public ConsultationForm getConsultationForm(@PathParam("consultationId") int consultationId) {
         return consultationFormService.getConsultationForm(consultationId);
-
     }
+
+    @POST
+    @Path("/{consultationId}/questions/{questionId}/answer")
+    public Response answerQuestion(
+            @PathParam("consultationId") int consultationId,
+            @PathParam("questionId") int questionId,
+            Answer answer) {
+
+        consultationFormService.answerQuestion(consultationId, questionId, answer);
+
+        return Response.ok().build();
+    }
+
 
     private static URI uriFor(ConsultationForm persistedConsultationForm) {
         return UriBuilder.fromResource(ConsultationFormResource.class).path(String.valueOf(persistedConsultationForm.getId())).build();

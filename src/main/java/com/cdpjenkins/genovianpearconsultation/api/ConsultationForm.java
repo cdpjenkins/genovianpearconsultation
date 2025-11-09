@@ -16,12 +16,16 @@ public class ConsultationForm {
     Integer id;
     String productName;
     List<Question> questions;
+    List<Answer> answers;
 
     public ConsultationForm(String productName) {
-        this(null, productName, new ArrayList<>());
+        this(null, productName, new ArrayList<>(), new ArrayList<>());
     }
 
-    public List<Question> getQuestions() {
-        return questions;
+    public Answer getAnswer(int questionId) {
+        return answers.stream()
+                .filter(answer -> answer.getQuestionId() == questionId)
+                .findFirst()
+                .orElse(null);
     }
 }

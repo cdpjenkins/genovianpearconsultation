@@ -1,5 +1,6 @@
 package com.cdpjenkins.genovianpearconsultation.resources;
 
+import com.cdpjenkins.genovianpearconsultation.api.Answer;
 import com.cdpjenkins.genovianpearconsultation.api.ConsultationForm;
 import com.cdpjenkins.genovianpearconsultation.api.Question;
 import com.cdpjenkins.genovianpearconsultation.core.ConsultationFormService;
@@ -10,6 +11,8 @@ import jakarta.ws.rs.core.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
@@ -68,5 +71,25 @@ class ConsultationFormResourceTest {
                         new Question(3, "Please enter your blood pressure."),
                         new Question(4, "Are you allergic to any of the ingredients in this medication?")
                 ));
+    }
+
+    @Test
+    void can_post_answer_to_a_question_on_a_consultation_form() {
+        EXT.target("/consultations")
+                .request()
+                .post(Entity.json(new ConsultationForm("genovian-pear")));
+
+        Response response = EXT.target(String.format("/consultations/1/questions/%d/answer", 1))
+                .request()
+                .post(Entity.json(new Answer(1, "185 cm")));
+        assertThat(response.getStatus(), is(200));
+
+        ConsultationForm consultationForm = EXT.target("/consultations/1")
+                .request()
+                .get()
+                .readEntity(ConsultationForm.class);
+
+        assertThat(consultationForm.getAnswers(),
+                is(List.of(new Answer(1, "185 cm"))));
     }
 }

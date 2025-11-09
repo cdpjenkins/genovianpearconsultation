@@ -1,6 +1,4 @@
 # TODO
-- Consultation Form has questions
-- POST textual answers to those questions by ID
 - Before all questions are answered, status is set to IN_PROGRESS
 - When all questions are answered, status is set to PENDING
 - When in state PENDING, can submit for approval
@@ -14,6 +12,7 @@
       want something stronger than this)
     - Authorisation: Users can only interact with forms that they own
 - Error handling:
+    - Trying to POST same answer that has already been answered 
     - Trying to GET a form that doesn't exist -> 404
     - Trying to POST to a form that doesn't exist -> 404
     - Trying to POST to a form that is not in state IN_PROGRESS -> 400
@@ -23,3 +22,5 @@
 - Create a basic Dropwizard app skeleton
 - POST a ConsultationForm to create it
 - GET a ConsultationForm by id
+- Consultation Form has questions
+- POST textual answers to those questions by ID

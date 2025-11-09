@@ -1,5 +1,6 @@
 package com.cdpjenkins.genovianpearconsultation.core;
 
+import com.cdpjenkins.genovianpearconsultation.api.Answer;
 import com.cdpjenkins.genovianpearconsultation.api.ConsultationForm;
 import com.cdpjenkins.genovianpearconsultation.api.Question;
 
@@ -12,7 +13,7 @@ public class ConsultationFormService {
     AtomicInteger idAllocator = new AtomicInteger();
 
     // In real life, this would be a database
-    Map<Integer, ConsultationForm> consultationFormStorage = new HashMap<>();
+    Map<Integer, ConsultationForm> consultationFormRepository = new HashMap<>();
 
     public ConsultationForm createConsultationForm(ConsultationForm consultationForm) {
         consultationForm.setId(idAllocator.incrementAndGet());
@@ -26,13 +27,25 @@ public class ConsultationFormService {
                 )
         );
 
-        consultationFormStorage.put(consultationForm.getId(), consultationForm);
+        consultationFormRepository.put(consultationForm.getId(), consultationForm);
 
         return consultationForm;
     }
 
     public ConsultationForm getConsultationForm(int consultationId) {
-        return consultationFormStorage.get(consultationId);
+        return consultationFormRepository.get(consultationId);
+    }
+
+    public void answerQuestion(int consultationId, int questionId, Answer answer) {
+        ConsultationForm consultationForm = consultationFormRepository.get(consultationId);
+
+        if (consultationForm.getAnswer(questionId) == null) {
+            List<Answer> answers = consultationForm.getAnswers();
+            answers.add(answer);
+        } else {
+            // TODO throw an exception that we define, and map it to an appropriate HTTP status code
+            throw new IllegalArgumentException("Question already answered");
+        }
     }
 
     /**
