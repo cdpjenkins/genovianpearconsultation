@@ -1,5 +1,6 @@
 package com.cdpjenkins.genovianpearconsultation.api;
 
+import jdk.jshell.Snippet;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,5 +28,16 @@ public class ConsultationForm {
                 .filter(answer -> answer.getQuestionId() == questionId)
                 .findFirst()
                 .orElse(null);
+    }
+
+    public Status getStatus() {
+        return Status.IN_PROGRESS;
+    }
+
+    public enum Status {
+        IN_PROGRESS,
+        COMPLETED,
+        APPROVED,
+        REJECTED
     }
 }

@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.List;
 
+import static com.cdpjenkins.genovianpearconsultation.api.ConsultationForm.Status.IN_PROGRESS;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.is;
@@ -44,13 +45,13 @@ class ConsultationFormResourceTest {
         ConsultationForm createdConsultationForm = response.readEntity(ConsultationForm.class);
         assertThat(createdConsultationForm.getProductName(), is("genovian-pear"));
         assertThat(createdConsultationForm.getId(), is(1));
+        assertThat(createdConsultationForm.getStatus(), is(IN_PROGRESS));
 
         Response getResponse = EXT.target("/consultations/1")
                 .request()
                 .get();
         assertThat(getResponse.getStatus(), is(200));
         assertThat(getResponse.readEntity(ConsultationForm.class), is(createdConsultationForm));
-
     }
 
     @Test

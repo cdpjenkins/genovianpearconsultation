@@ -1,5 +1,4 @@
 # TODO
-- Before all questions are answered, status is set to IN_PROGRESS
 - When all questions are answered, status is set to PENDING
 - When in state PENDING, can submit for approval
 - Form is approved if <some condition> is met
@@ -24,3 +23,4 @@
 - GET a ConsultationForm by id
 - Consultation Form has questions
 - POST textual answers to those questions by ID
+- Before all questions are answered, status is set to IN_PROGRESS
