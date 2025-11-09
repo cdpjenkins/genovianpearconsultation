@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.List;
 
+import static com.cdpjenkins.genovianpearconsultation.api.ConsultationForm.Status.COMPLETED;
 import static com.cdpjenkins.genovianpearconsultation.api.ConsultationForm.Status.IN_PROGRESS;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
@@ -60,10 +61,7 @@ class ConsultationFormResourceTest {
                 .request()
                 .post(Entity.json(new ConsultationForm("genovian-pear")));
 
-        ConsultationForm consultationForm = EXT.target("/consultations/1")
-                .request()
-                .get()
-                .readEntity(ConsultationForm.class);
+        ConsultationForm consultationForm = getConsultationForm();
 
         assertThat(consultationForm.getQuestions(),
                 contains(
@@ -80,17 +78,42 @@ class ConsultationFormResourceTest {
                 .request()
                 .post(Entity.json(new ConsultationForm("genovian-pear")));
 
-        Response response = EXT.target(String.format("/consultations/1/questions/%d/answer", 1))
-                .request()
-                .post(Entity.json(new Answer(1, "185 cm")));
+        Response response = postAnswer(1, 1, "185 cm");
         assertThat(response.getStatus(), is(200));
 
-        ConsultationForm consultationForm = EXT.target("/consultations/1")
-                .request()
-                .get()
-                .readEntity(ConsultationForm.class);
+        ConsultationForm consultationForm = getConsultationForm();
 
         assertThat(consultationForm.getAnswers(),
                 is(List.of(new Answer(1, "185 cm"))));
+    }
+
+    @Test
+    void status_is_set_to_completed_when_all_questions_are_answered() {
+        EXT.target("/consultations")
+                .request()
+                .post(Entity.json(new ConsultationForm("genovian-pear")));
+
+        postAnswer(1, 1, "185 cm");
+        postAnswer(1, 2, "80 kg");
+        postAnswer(1, 3, "120/80");
+        postAnswer(1, 4, "No");
+
+        assertThat(getConsultationForm().getStatus(), is(COMPLETED));
+    }
+
+    private static ConsultationForm getConsultationForm() {
+        return EXT.target("/consultations/1")
+                .request()
+                .get()
+                .readEntity(ConsultationForm.class);
+    }
+
+    private static Response postAnswer(int consultationFormId, int questionId, String answerText) {
+        Response response = EXT.target(String.format("/consultations/%d/questions/%d/answer", consultationFormId, questionId))
+                .request()
+                .post(Entity.json(new Answer(questionId, answerText)));
+        assertThat(response.getStatus(), is(200));
+
+        return response;
     }
 }

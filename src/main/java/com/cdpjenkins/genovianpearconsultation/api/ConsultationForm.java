@@ -18,9 +18,10 @@ public class ConsultationForm {
     String productName;
     List<Question> questions;
     List<Answer> answers;
+    Status status;
 
     public ConsultationForm(String productName) {
-        this(null, productName, new ArrayList<>(), new ArrayList<>());
+        this(null, productName, new ArrayList<>(), new ArrayList<>(), Status.IN_PROGRESS);
     }
 
     public Answer getAnswer(int questionId) {
@@ -30,8 +31,9 @@ public class ConsultationForm {
                 .orElse(null);
     }
 
-    public Status getStatus() {
-        return Status.IN_PROGRESS;
+    public boolean allQuestionsAreAnswered() {
+        return questions.stream()
+                .allMatch(question -> getAnswer(question.getId()) != null);
     }
 
     public enum Status {

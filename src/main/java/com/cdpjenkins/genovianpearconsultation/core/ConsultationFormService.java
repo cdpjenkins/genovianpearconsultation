@@ -46,6 +46,10 @@ public class ConsultationFormService {
             // TODO throw an exception that we define, and map it to an appropriate HTTP status code
             throw new IllegalArgumentException("Question already answered");
         }
+
+        if (consultationForm.allQuestionsAreAnswered()) {
+            consultationForm.setStatus(ConsultationForm.Status.COMPLETED);
+        }
     }
 
     /**

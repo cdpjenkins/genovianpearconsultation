@@ -4,6 +4,7 @@
 - Form is approved if <some condition> is met
 - Form is rejected if <some condition> is not met
 - If form is rejected, a field is set on the form with a reason for rejection
+- We're specifying IDs in both URL path and in JSON body, which allows them to be different
 
 - Auth
     - See https://codeburst.io/understanding-authentication-and-authorization-in-dropwizard-app-kotlin-e593d2052f33
